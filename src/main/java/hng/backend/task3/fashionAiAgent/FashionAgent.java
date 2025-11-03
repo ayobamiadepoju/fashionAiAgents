@@ -4,12 +4,13 @@ import com.google.adk.agents.BaseAgent;
 import com.google.adk.agents.LlmAgent;
 import com.google.adk.tools.AgentTool;
 import com.google.adk.tools.FunctionTool;
+import hng.backend.task3.fashionAiAgent.tools.OutfitTool;
+import hng.backend.task3.fashionAiAgent.tools.WeatherTool;
 
-public class AiAgents {
+public class FashionAgent {
 
     public static BaseAgent createRootAgent() {
 
-        // Weather Agent – gets location, then fetches real weather
         // 🌦️ Weather Agent
         LlmAgent weatherAgent = LlmAgent.builder()
                 .name("weather_agent")
@@ -32,7 +33,6 @@ public class AiAgents {
                 .outputKey("weather")
                 .build();
 
-
         // Fashion Agent – uses weather info to suggest outfits
         return LlmAgent.builder()
                 .name("fashion_agent")
@@ -53,7 +53,9 @@ public class AiAgents {
                         - "The weather in London is rainy with 11°C. Try a trench coat, waterproof boots, and a cozy scarf ☔."
                 """)
                 .tools(AgentTool.create(weatherAgent))
+                .tools(FunctionTool.create(OutfitTool.class, "getSuggestedOutfit"))
                 .outputKey("recommendation")
                 .build();
     }
 }
+

@@ -1,10 +1,12 @@
-package hng.backend.task3.fashionAiAgent;
+package hng.backend.task3.fashionAiAgent.controller;
 
 import com.google.adk.events.Event;
 import com.google.adk.runner.InMemoryRunner;
 import com.google.adk.sessions.Session;
 import com.google.genai.types.Content;
 import com.google.genai.types.Part;
+import hng.backend.task3.fashionAiAgent.FashionAgent;
+import hng.backend.task3.fashionAiAgent.model.TelexMessage;
 import io.reactivex.rxjava3.core.Flowable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +21,7 @@ public class TelexWebhookController {
     private final Session session;
 
     public TelexWebhookController() {
-        var rootAgent = AiAgents.createRootAgent();
+        var rootAgent = FashionAgent.createRootAgent();
         this.runner = new InMemoryRunner(rootAgent);
         this.session = runner.sessionService()
                 .createSession(runner.appName(), "telexUser")

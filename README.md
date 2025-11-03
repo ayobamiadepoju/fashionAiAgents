@@ -8,19 +8,19 @@ This project is a multi-agent AI system that provides weather-based outfit sugge
 
 - 🌤️ Weather-aware outfit recommendations
 - 👗 Fashion prompt generation
-- 🖼️ Outfit image generation via LLM
 - 💬 Friendly chat responses (e.g., “Hi”, “Hello”)
-- 🔌 Telex.im integration via Mastra A2A protocol
+- 🔌 Telex.im integration via Webhook A2A protocol
 
 ---
 
 ## 🧱 Architecture
-User → Telex.im → Webhook → Fashion Agent ↳ Weather Agent ↳ Image Generator Agent
+User → Telex.im → TelexWebhookController → Fashion Agent
+                                            ↳ Weather Agent
+                                            ↳ Outfit Agent
 
-
-- `fashion_agent`: Orchestrates the conversation and coordinates other agents
+- `fashion_agent`: Orchestrates workflow: gets weather → suggests outfit
 - `weather_agent`: Fetches current weather for a given location
-- `image_generator_agent`: Generates outfit visuals based on prompts
+- `outfit_agent` – Generates outfit suggestions based on temperature & condition
 
 ---
 
@@ -30,22 +30,26 @@ User → Telex.im → Webhook → Fashion Agent ↳ Weather Agent ↳ Image Gene
 - Spring Boot
 - Google ADK (Agent Development Kit)
 - Gemini 2.0 Flash (via Google Generative AI SDK)
-- Telex.im (Mastra A2A workflow)
-- RxJava (for async agent events)
+- Telex.im (Webhook)
 
 ---
 
 ## 📦 Project Structure
 ```
-src/ 
-│    ├── main/ 
-│    │   
-│    ├── java/ 
-│    └── hng/backend/task3/fashionAiAgent/ 
-│            ├── AiAgents.java 
-│            ├── TelexWebhookController.java 
-│            ├── FashionAiAgentApplication.java 
-└──          └── TelexMessage.java
+src/
+├── main/
+│   ├── java/
+│   │   └── hng/backend/task3/fashionAiAgent/
+│   │       ├── AiAgents.java                # Defines all LLM agents
+│   │       ├── OutfitTool.java
+│   │       ├── WeatherTool.java
+│   │       ├── TelexWebhookController.java  # Handles Telex webhook POST requests
+│   │       ├── TelexMessage.java            # Model for Telex request payloads
+│   │       └── FashionAiAgentApplication.java  # Spring Boot entry point
+│   └── resources/
+│       └── application.propertie
+├── README.md
+└── pom.xml
 
 ```
 
@@ -57,8 +61,6 @@ src/
 Run the app locally:
 
 ```bash
-./gradlew bootRun
-
 Then test via console or send POST requests to:
 http://localhost:8080/telex/webhook
 
@@ -67,88 +69,6 @@ Sample payload:
   "text": "What should I wear today?"
 }
 ```
-Absolutely! Here's your detailed README.md formatted in proper Markdown:
-# 👗 Fashion AI Agent – Telex.im Integration
-
-This project is a multi-agent AI system that provides weather-based outfit suggestions and generates visual representations of fashion looks. It is built using [Google ADK](https://github.com/google/adk), powered by Gemini models, and deployed as a Spring Boot service with webhook support for [Telex.im](https://telex.im).
-
----
-
-## 🚀 Features
-
-- 🌤️ Weather-aware outfit recommendations
-- 👗 Fashion prompt generation
-- 🖼️ Outfit image generation via LLM
-- 💬 Friendly chat responses (e.g., “Hi”, “Hello”)
-- 🔌 Telex.im integration via Mastra A2A protocol
-
----
-
-## 🧱 Architecture
-
-
-User → Telex.im → Webhook → Fashion Agent ↳ Weather Agent ↳ Image Generator Agent
-
-- `fashion_agent`: Orchestrates the conversation and coordinates other agents
-- `weather_agent`: Fetches current weather for a given location
-- `image_generator_agent`: Generates outfit visuals based on prompts
-
----
-
-## 🛠️ Technologies
-
-- Java 17+
-- Spring Boot
-- Google ADK (Agent Development Kit)
-- Gemini 2.0 Flash (via Google Generative AI SDK)
-- Telex.im (Mastra A2A workflow)
-- RxJava (for async agent events)
-
----
-
-## 📦 Project Structure
-```
-src/ 
-├── main/ 
-│   ├── java/ 
-│   
-│   └── hng/backend/task3/fashionAiAgent/ 
-│   │       
-├── FashionAiAgentApplication.java 
-│   
-│       
-├── AgentFactory.java 
-│   
-│       
-├── TelexWebhookController.java 
-│   
-│
-
-└── TelexMessage.java
-```
-
----
-
-## 🧪 Local Testing
-
-Run the app locally:
-
-```bash
-./gradlew bootRun
-```
-
-### Then test via console or send POST requests to:
-```
-http://localhost:8080/telex/webhook
-```
-
-### Sample payload:
-```
-{
-  "text": "What should I wear today?"
-}
-```
-
 
 ## 🌐 Deployment
 Deploy to a public HTTPS endpoint using:
@@ -210,5 +130,6 @@ Replace {channel-id} with your Telex channel UUID.
 **Email:** ayobamiadepoju263@gmail.com  
 **Stack:** Java / Spring Boot  
 **GitHub:** [@ayobamiadepoju](https://github.com/ayobamiadepoju)
-HNG Stage 3 Backend Task
+Task: HNG Stage 3 – Backend (AI Agents)
+
 Built with ❤️ using Google ADK, Gemini, and Spring Boot

@@ -1,4 +1,4 @@
-package hng.backend.task3.fashionAiAgent;
+package hng.backend.task3.fashionAiAgent.tools;
 
 import com.google.adk.tools.Annotations;
 import com.google.gson.Gson;
@@ -117,3 +117,4 @@ public class WeatherTool {
         return advice.toString();
     }
 }
+

@@ -1,4 +1,4 @@
-package hng.backend.task3.fashionAiAgent;
+package hng.backend.task3.fashionAiAgent.model;
 
 import lombok.Data;
 
